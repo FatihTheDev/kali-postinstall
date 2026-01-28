@@ -19,7 +19,6 @@ sudo apt install -y \
   network-manager-gnome \
   kali-defaults \
   kali-defaults-desktop \
-  kali
   kali-root-login \
   kali-menu \
   kali-undercover
