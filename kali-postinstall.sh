@@ -51,11 +51,16 @@ sudo apt-mark manual \
   echo "Enabling mac address spoof randomization with macchanger"
   sudo tee /etc/NetworkManager/dispatcher.d/01-macchanger > /dev/null <<'EOF'
 #!/bin/sh
-INTERFACE=$1
-ACTION=$2
 
-if [ "$ACTION" = "up" ] && [[ "$INTERFACE" == en* ]]; then
-    macchanger -e "$INTERFACE"
+INTERFACE="$1"
+ACTION="$2"
+
+if [ "$ACTION" = "up" ]; then
+    case "$INTERFACE" in
+        en*|et*)
+            macchanger -e "$INTERFACE"
+            ;;
+    esac
 fi
 EOF
 sudo chmod +x /etc/NetworkManager/dispatcher.d/01-macchanger
