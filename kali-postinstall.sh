@@ -43,3 +43,19 @@ sudo apt-mark manual \
   echo "Installing FirewallD and starting the service"
   sudo apt install -y firewalld
   systemctl enable --now firewalld
+  echo "Opening ports for LocalSend"
+  sudo firewall-cmd --permanent --add-port=53317/tcp
+  sudo firewall-cmd --permanent --add-port=53317/udp
+  sudo firewall-cmd --reload
+
+  echo "Enabling mac address spoof randomization with macchanger"
+  sudo tee /etc/NetworkManager/dispatcher.d/01-macchanger > /dev/null <<'EOF'
+#!/bin/sh
+INTERFACE=$1
+ACTION=$2
+
+if [ "$ACTION" = "up" ] && [[ "$INTERFACE" == en* ]]; then
+    macchanger -e "$INTERFACE"
+fi
+EOF
+sudo chmod +x /etc/NetworkManager/dispatcher.d/01-macchanger
