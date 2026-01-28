@@ -40,3 +40,7 @@ sudo apt-mark manual \
 
   echo "Installing Brave Browser"
   curl -fsS https://dl.brave.com/install.sh | sh
+
+  echo "Installing FirewallD and starting the service"
+  sudo apt install -y firewalld
+  systemctl enable --now firewalld
