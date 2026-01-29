@@ -64,3 +64,38 @@ if [ "$ACTION" = "up" ]; then
 fi
 EOF
 sudo chmod +x /etc/NetworkManager/dispatcher.d/01-macchanger
+
+echo "Installing redshift for night light and setting it to always be 1600K"
+sudo apt install -y redshift redshift-gtk
+
+# Kill any existing redshift instances
+pkill redshift
+
+# Ensure config directory and file exist
+mkdir -p ~/.config
+cat > ~/.config/redshift.conf << EOF
+[redshift]
+temp-day=1600
+temp-night=1600
+transition=0
+adjustment-method=randr
+location-provider=manual
+
+[manual]
+lat=0
+lon=0
+EOF
+
+# Create autostart directory if it doesn't exist
+mkdir -p ~/.config/autostart
+
+# Create desktop entry for redshift
+cat > ~/.config/autostart/redshift.desktop << EOF
+[Desktop Entry]
+Name=Redshift
+Comment=Adjust screen color temperature
+Exec=redshift
+Type=Application
+Terminal=false
+Hidden=false
+EOF
