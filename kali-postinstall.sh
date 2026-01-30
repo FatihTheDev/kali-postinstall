@@ -99,3 +99,13 @@ Type=Application
 Terminal=false
 Hidden=false
 EOF
+
+echo "Enable IP forwarding and set it to persist across reboots."
+# Enable IP forwarding temporarily
+sudo sysctl -w net.ipv4.ip_forward=1
+
+# Create config file in /etc/sysctl.d/ for persistence
+echo 'net.ipv4.ip_forward = 1' | sudo tee /etc/sysctl.d/99-ip-forward.conf
+
+# Apply changes immediately
+sudo sysctl --system
